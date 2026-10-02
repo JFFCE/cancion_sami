@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>La Canción Misteriosa</title>
+    <title> Pag samiiii </title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -90,9 +90,49 @@
         #runaway-btn {
             transition: top 0.2s ease, left 0.2s ease;
         }
+
+        /* Animación para que la campanita llame la atención */
+        @keyframes ring {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(15deg); }
+            75% { transform: rotate(-15deg); }
+        }
+        .bell-ring {
+            animation: ring 1s ease-in-out infinite;
+        }
     </style>
 </head>
 <body>
+
+    <!-- BOTÓN DE NOTIFICACIONES (Campanita) -->
+    <div onclick="toggleNotificaciones()" class="fixed top-4 right-4 z-40 bg-white p-3 rounded-full shadow-lg border border-rose-100 cursor-pointer hover:bg-rose-50 transition-colors">
+        <div class="relative">
+            <svg class="w-6 h-6 text-rose-500 bell-ring" id="bell-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
+            </svg>
+            <!-- Puntito rojo contador -->
+            <span id="notif-badge" class="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center border-2 border-white">
+                3
+            </span>
+        </div>
+    </div>
+
+    <!-- PANEL DE NOTIFICACIONES (Modal oculto por defecto) -->
+    <div id="notif-modal" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 hidden opacity-0 transition-opacity duration-300 flex justify-center items-center p-4">
+        <div class="bg-white rounded-2xl w-full max-w-sm overflow-hidden shadow-2xl border-2 border-rose-200 transform scale-95 transition-transform duration-300" id="notif-content">
+            <!-- Header del Modal -->
+            <div class="bg-rose-50 p-4 border-b border-rose-100 flex justify-between items-center">
+                <h3 class="font-bold text-rose-900 text-lg flex items-center gap-2">
+                    <span>💌</span> Mensajes para vos
+                </h3>
+                <button onclick="toggleNotificaciones()" class="text-rose-400 hover:text-rose-600 font-bold text-xl p-1">✕</button>
+            </div>
+            <!-- Lista de Mensajes -->
+            <div class="p-4 max-h-[60vh] overflow-y-auto flex flex-col gap-3" id="notif-list">
+                <!-- Los mensajes se inyectan acá con JavaScript -->
+            </div>
+        </div>
+    </div>
 
     <!-- STEP 1 -->
     <div id="step1" class="screen soft-card active">
@@ -117,23 +157,21 @@
         </div>
     </div>
 
-    <!-- STEP 3 (NUEVO: Checkbox de trampa) -->
+    <!-- STEP 3 -->
     <div id="step3" class="screen soft-card">
         <h2 class="text-xl md:text-2xl font-bold leading-relaxed text-gray-800 mb-2">
             Además... te pedí que no la buscaras (y espero que no hayas hecho trampa).
         </h2>
-        
         <label class="flex items-center gap-3 cursor-pointer text-left text-sm md:text-base text-gray-700 bg-rose-50 p-4 rounded-xl border border-rose-200 mt-2">
             <input type="checkbox" id="no-cheat-cb" class="w-6 h-6 text-rose-500 rounded border-gray-300 focus:ring-rose-500 accent-rose-500 cursor-pointer shrink-0">
             <span class="font-semibold text-rose-900">Acepto que no hice trampa ni busqué la canción</span>
         </label>
-
         <div class="mt-4">
             <button id="btn-step3" onclick="goToStep('step3', 'step4')" class="btn btn-primary opacity-50 cursor-not-allowed" disabled>Siguiente</button>
         </div>
     </div>
 
-    <!-- STEP 4 (NUEVO: Condición de verse) -->
+    <!-- STEP 4 -->
     <div id="step4" class="screen soft-card">
         <h2 class="text-xl md:text-2xl font-bold leading-relaxed text-gray-800">
             Si querías saberlo... Te puse como condición vernos, y yo te la decía en persona...
@@ -143,7 +181,7 @@
         </div>
     </div>
 
-    <!-- STEP 5 (Antes Step 3: ¿Querés conocer la canción?) -->
+    <!-- STEP 5 -->
     <div id="step5" class="screen soft-card">
         <h2 class="text-xl md:text-2xl font-bold leading-relaxed text-gray-800 mb-2">
             Entonces... <br> ¿querés saber cuál es la canción?
@@ -154,7 +192,7 @@
         </div>
     </div>
 
-    <!-- STEP 6 (Antes Step 4: Pregunta chamuyero) -->
+    <!-- STEP 6 -->
     <div id="step6" class="screen soft-card">
         <h2 class="text-xl md:text-2xl font-bold leading-relaxed text-gray-800">
             Antes una preguntonta:<br><br>
@@ -166,7 +204,7 @@
         </div>
     </div>
 
-    <!-- STEP 7 (Antes Step 5: ¿Estás segura?) -->
+    <!-- STEP 7 -->
     <div id="step7" class="screen soft-card">
         <div class="text-rose-500 mb-2">
             <svg class="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
@@ -180,7 +218,7 @@
         </div>
     </div>
 
-    <!-- STEP 8 (Antes Step 6: Opción de cambiar) -->
+    <!-- STEP 8 -->
     <div id="step8" class="screen soft-card">
         <h2 class="text-xl md:text-2xl font-bold leading-relaxed text-gray-800">
             No, dale, Samirah... te doy la opcion de cambiar tu respuesta:<br><br>
@@ -202,7 +240,6 @@
             <span class="text-rose-500 text-lg"> Espero que te hayas divertido, ¡elegí donde escuchar la canción! </span>
         </h2>
         <div class="flex flex-col gap-3 w-full mt-2">
-            <!-- Link real for Spotify -->
             <a href="https://open.spotify.com/track/0ei64Ivi3kxqHaQuYByc79?si=ed3227fca3db4fad" target="_blank" class="w-full py-3.5 rounded-2xl text-white font-bold text-lg flex justify-center items-center gap-2 transition-all active:scale-95 shadow-md" style="background-color: #1DB954; text-decoration: none;">
                 <svg viewBox="0 0 24 24" class="h-6 w-6" fill="currentColor">
                     <path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.84.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.84.241 1.2zM20.16 9.6C16.44 7.38 9.54 7.14 5.58 8.4c-.6.18-1.2-.18-1.38-.72-.18-.6.18-1.2.72-1.38 4.56-1.5 12.18-1.26 16.5 1.32.54.3.72.96.42 1.5-.299.54-.959.72-1.68.48z"/>
@@ -210,7 +247,6 @@
                 Spotify
             </a>
             
-            <!-- Link real for YouTube -->
             <a href="https://youtu.be/wOAvVkW8NKc?si=Ay52IruB3w_XqBL9" target="_blank" class="w-full py-3.5 rounded-2xl text-white font-bold text-lg flex justify-center items-center gap-2 transition-all active:scale-95 shadow-md" style="background-color: #FF0000; text-decoration: none;">
                 <svg viewBox="0 0 24 24" class="h-6 w-6" fill="currentColor">
                     <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
@@ -221,7 +257,63 @@
     </div>
 
     <script>
-        // Lógica del Checkbox para habilitar el botón "Siguiente"
+        // ==========================================
+        // SISTEMA DE NOTIFICACIONES
+        // ==========================================
+        
+        // EDITAR MENSAJES
+        const mensajesBoludos = [
+            "¡La pasé muy lindo!",
+            "¿Volvemos a salir otro día?"
+        ];
+
+        const notifBadge = document.getElementById('notif-badge');
+        const bellIcon = document.getElementById('bell-icon');
+        const notifModal = document.getElementById('notif-modal');
+        const notifContent = document.getElementById('notif-content');
+        const notifList = document.getElementById('notif-list');
+        let notifsLeidas = false;
+
+        // Cargar la cantidad de notificaciones
+        notifBadge.innerText = mensajesBoludos.length;
+
+        // Cargar los mensajes en el modal
+        mensajesBoludos.forEach(mensaje => {
+            const div = document.createElement('div');
+            div.className = 'bg-rose-100/50 p-3 rounded-lg border border-rose-100 text-gray-800 text-sm md:text-base text-left';
+            div.innerHTML = `<span class="text-rose-500 font-bold mr-1">Joaquín dice:</span> ${mensaje}`;
+            notifList.appendChild(div);
+        });
+
+        function toggleNotificaciones() {
+            if (notifModal.classList.contains('hidden')) {
+                // Abrir
+                notifModal.classList.remove('hidden');
+                setTimeout(() => {
+                    notifModal.classList.remove('opacity-0');
+                    notifContent.classList.remove('scale-95');
+                }, 10);
+                
+                // Marcar como leídas (saca el número y frena la animación de la campana)
+                if (!notifsLeidas) {
+                    notifBadge.style.display = 'none';
+                    bellIcon.classList.remove('bell-ring');
+                    notifsLeidas = true;
+                }
+            } else {
+                // Cerrar
+                notifModal.classList.add('opacity-0');
+                notifContent.classList.add('scale-95');
+                setTimeout(() => {
+                    notifModal.classList.add('hidden');
+                }, 300);
+            }
+        }
+
+        // ==========================================
+        // LÓGICA DE LA HISTORIA
+        // ==========================================
+
         const checkbox = document.getElementById('no-cheat-cb');
         const btnStep3 = document.getElementById('btn-step3');
 
@@ -235,7 +327,6 @@
             }
         });
 
-        // Smooth transition between screens
         function goToStep(currentId, nextId) {
             const currentScreen = document.getElementById(currentId);
             const nextScreen = document.getElementById(nextId);
@@ -248,8 +339,6 @@
                 
                 setTimeout(() => {
                     nextScreen.classList.add('active');
-                    
-                    // Trigger confetti ONLY when landing on the final step
                     if (nextId === 'stepFinal') {
                         triggerConfetti();
                     }
@@ -257,7 +346,6 @@
             }, 500); 
         }
 
-        // Función para lanzar el confeti
         function triggerConfetti() {
             confetti({
                 particleCount: 100,
@@ -265,7 +353,6 @@
                 origin: { x: 0.2, y: 0.6 },
                 colors: ['#f43f5e', '#ec4899', '#fbcfe8', '#ffffff']
             });
-            
             confetti({
                 particleCount: 100,
                 spread: 70,
@@ -274,39 +361,31 @@
             });
         }
 
-        // Logic for the Runaway "NO" Button
+        // Botón "NO" que se escapa
         const runawayBtn = document.getElementById('runaway-btn');
-
         function moveButton(e) {
             if(e) e.preventDefault();
-            
             if (runawayBtn.style.position !== 'fixed') {
                 runawayBtn.style.position = 'fixed';
                 runawayBtn.style.width = runawayBtn.offsetWidth + 'px';
                 runawayBtn.style.zIndex = '100';
             }
-
             const btnWidth = runawayBtn.offsetWidth;
             const btnHeight = runawayBtn.offsetHeight;
-            
             const safeWidth = window.innerWidth * 0.6;
             const safeHeight = window.innerHeight * 0.6;
-            
             const offsetX = window.innerWidth * 0.2;
             const offsetY = window.innerHeight * 0.2;
-
             const randomX = offsetX + Math.random() * (safeWidth - btnWidth);
             const randomY = offsetY + Math.random() * (safeHeight - btnHeight);
-
             runawayBtn.style.left = randomX + 'px';
             runawayBtn.style.top = randomY + 'px';
         }
-
         runawayBtn.addEventListener('mouseover', moveButton);
         runawayBtn.addEventListener('touchstart', moveButton);
         runawayBtn.addEventListener('click', moveButton); 
 
-        // Logic for the Morphing "SÍ" Button (Ahora en Step 8)
+        // Botón "SÍ" que intenta convencerla
         const morphPhrases = [
             "¿En serio? 🥺",
             "Dale, porfa...",
@@ -314,33 +393,26 @@
             "Yo sé que en el fondo sabés que no...",
             "DALE SAMIRAH, NO." 
         ];
-        
         let morphState = 0; 
-
         function handleMorphButton() {
             const btn = document.getElementById('morph-btn');
             const noBtn = document.getElementById('final-no-btn');
             
             if (morphState < morphPhrases.length - 1) {
                 btn.innerText = morphPhrases[morphState];
-                
                 let reduceScale = 1 - (morphState * 0.15);
                 btn.style.transform = `scale(${reduceScale})`;
                 btn.style.width = 'auto'; 
-                
                 let increaseScale = 1 + (morphState * 0.25);
                 noBtn.style.transform = `scale(${increaseScale})`;
-                
                 morphState++;
             } 
             else if (morphState === morphPhrases.length - 1) {
                 btn.innerText = morphPhrases[morphState];
                 btn.classList.remove('btn-secondary');
                 btn.classList.add('btn-primary'); 
-                
                 btn.style.transform = "scale(1)";
                 noBtn.style.transform = "scale(1)";
-                
                 morphState++;
             } 
             else {
